@@ -3,7 +3,6 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
-import org.bytedeco.llvm.global.LLVM;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 public class Main {
@@ -85,7 +84,12 @@ public class Main {
                 /*condition:LLVMValueRef*/ condition,
                 /*ifTrue:LLVMBasicBlockRef*/ ifTrue,
                 /*ifFalse:LLVMBasicBlockRef*/ ifFalse);
-
+        LLVMValueRef tmp_=LLVMBuildICmp(builder, /*这是个int型常量，表示比较的方式*/LLVMIntEQ, n, zero, "condition = n == 0");
+        tmp_ = LLVMBuildICmp(builder, LLVMIntNE, LLVMConstInt(i32Type, 0, 0), tmp_, "tmp_");
+// 生成xor
+        tmp_ = LLVMBuildXor(builder, tmp_, LLVMConstInt(LLVMInt1Type(), 1, 0), "tmp_");
+// 生成zext
+        tmp_ = LLVMBuildZExt(builder, tmp_, i32Type, "tmp_");
         LLVMPositionBuilderAtEnd(builder, block2);//后续生成的指令将追加在block2的后面
 
         //函数返回指令
@@ -109,6 +113,11 @@ public class Main {
 
         //申请一个可存放该vector类型的内存
         LLVMValueRef vectorPointer = LLVMBuildAlloca(builder, vectorType, "vectorPointor");
+        // 生成icmp
+        // 生成icmp
+
+
+
         LLVMDumpModule(module);
         final BytePointer error = new BytePointer();
         LLVMPrintModuleToFile(module,"test.ll",error);
