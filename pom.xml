@@ -13,5 +13,12 @@
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies><!--在pom.xml中添加如下依赖-->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>llvm-platform</artifactId>
+            <version>13.0.1-1.5.7</version>
+        </dependency>
+    </dependencies>
 
 </project>
